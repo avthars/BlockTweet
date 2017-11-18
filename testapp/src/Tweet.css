@@ -1,0 +1,10 @@
+.Tweet {
+    background-color: blue;
+    height: 100px;
+    width: 100px;
+    padding: 20px;
+    color: white;
+    align-items: center;
+    align-content: center;
+    align-self: center; 
+}
