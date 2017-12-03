@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ManifestAssetPlugin = new CopyWebpackPlugin([ { from: 'public/manifest.json', to: 'manifest.json' } ]);
 const IconAssetPlugin = new CopyWebpackPlugin([ { from: 'public/favicon.ico', to: 'favicon.ico' } ]);
-const IconMobileAssetPlugin = new CopyWebpackPlugin([ { from: 'public/mobile-icon.png', to: 'mobile-icon.png' } ]);
+//const IconMobileAssetPlugin = new CopyWebpackPlugin([ { from: 'public/mobile-icon.png', to: 'mobile-icon.png' } ]);
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -48,5 +48,5 @@ module.exports = {
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]
   },
-  plugins: [HtmlWebpackPluginConfig, ManifestAssetPlugin, IconAssetPlugin, IconMobileAssetPlugin]
+  plugins: [HtmlWebpackPluginConfig, ManifestAssetPlugin, IconAssetPlugin]
 }

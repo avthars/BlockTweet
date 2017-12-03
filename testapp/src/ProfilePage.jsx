@@ -23,8 +23,8 @@ class ProfilePage extends React.Component {
     // add to render: <TweetList userTweets={this.state.userTweets} />
     render() {
       return (
-        <div>
-            <h1>{this.props.userName}'s BlockTweet Profile</h1>
+      <div>
+            <h1>{this.props.userName} BlockTweet Profile</h1>
             <InputBox 
             tweetList = {this.state.userTweets} 
             addTweet = {this.addTweet.bind(this)}
