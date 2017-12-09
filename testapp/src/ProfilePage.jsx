@@ -9,19 +9,33 @@ import React from 'react';
 class ProfilePage extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {userTweets: []};
+      this.state = {userTweets: [],};
     }
   
   //Function to add new tweet to list
     addTweet(newItem){
+      //add to local list of tweets
       this.setState(prevState => ({
           //concat new item onto list of old items
         userTweets: prevState.userTweets.concat(newItem),
       }));
+
+      //add locallist to storage
+    const USER_TWEETS = this.state.userTweets;
+    const FILE_NAME = 'tweets.json';  
+    const blockstack = window.blockstack;
+    const encrypt = true;
+    //const decrypt = true
+    //display error is return is false
+    return blockstack.putFile(FILE_NAME, JSON.stringify(USER_TWEETS), encrypt);
+
     }
   
     // add to render: <TweetList userTweets={this.state.userTweets} />
     render() {
+
+
+
       return (
       <div>
             <h1>{this.props.userName} BlockTweet Profile</h1>

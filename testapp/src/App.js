@@ -22,9 +22,9 @@ class App extends Component {
     let isSignedIn = this.checkSignedInStatus();
     this.state = {
       isSignedIn,
-      userData: null,
-      userName: 'Wayne Rooney', 
-      user: isSignedIn && this.loadPerson()
+      userData: null, 
+      user: isSignedIn && this.loadPerson(),
+      userName: isSignedIn && this.loadPerson().name(),
     };
   }
 
