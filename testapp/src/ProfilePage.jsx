@@ -21,21 +21,18 @@ class ProfilePage extends React.Component {
       }));
 
       //add locallist to storage
-    const USER_TWEETS = this.state.userTweets;
+    /*const USER_TWEETS = this.state.userTweets;
     const FILE_NAME = 'tweets.json';  
     const blockstack = window.blockstack;
     const encrypt = true;
     //const decrypt = true
     //display error is return is false
-    return blockstack.putFile(FILE_NAME, JSON.stringify(USER_TWEETS), encrypt);
+    return blockstack.putFile(FILE_NAME, JSON.stringify(USER_TWEETS), encrypt); */ 
 
     }
   
     // add to render: <TweetList userTweets={this.state.userTweets} />
     render() {
-
-
-
       return (
       <div>
             <h1>{this.props.userName} BlockTweet Profile</h1>

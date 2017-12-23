@@ -18,13 +18,12 @@ class App extends Component {
   constructor(props){
     super(props);
     //initially set user details to null, will update upon login
-    
     let isSignedIn = this.checkSignedInStatus();
     this.state = {
       isSignedIn,
-      userData: null, 
       user: isSignedIn && this.loadPerson(),
-      userName: isSignedIn && this.loadPerson().name(),
+      userData: [], 
+      userName: isSignedIn ? this.loadPerson() && this.loadPerson().name : 'Nameless',
     };
   }
 
@@ -85,21 +84,27 @@ export class LoginButton extends Component{
     super(props);
     this.state = {clicked: false};
     //bind
-    this.handleClick = this.handleClick.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
   }
   //onClick: Sign user in in Blockstack browser
-  handleClick(event){
+  handleSignIn(event){
     event.preventDefault();
     blockstack.redirectToSignIn();
-    //BlockTweetSignIn()
+  }
+
+  //onClick: Sign user out
+  handleSignOut(event){
+    event.preventDefault();
+    blockstack.signUserOut(window.location.href)
   }
 
   render(){
     return(
       <div>
       <button
-      onClick = {this.handleClick}
+      onClick = {this.handleSignIn}
       >Login with BlockStack ID</button>
+      <button onClick = {this.handleSignOut}> Logout </button> 
       </div>
     );
   }
