@@ -85,6 +85,7 @@ export class LoginButton extends Component{
     this.state = {clicked: false};
     //bind
     this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
   }
   //onClick: Sign user in in Blockstack browser
   handleSignIn(event){
@@ -95,7 +96,7 @@ export class LoginButton extends Component{
   //onClick: Sign user out
   handleSignOut(event){
     event.preventDefault();
-    blockstack.signUserOut(window.location.href)
+    blockstack.signUserOut(window.location.href);
   }
 
   render(){
@@ -123,7 +124,7 @@ export class UserTestComponent extends Component {
   render(){
     return(
       <div className="UserInfo">
-      <img class="avatar" src={this.state.avatarUrl} />
+      <img className="avatar" src={this.state.avatarUrl} />
       <h1>{this.state.name}</h1>
     </div>
     );

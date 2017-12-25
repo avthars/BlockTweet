@@ -93,7 +93,7 @@ class InputBox extends React.Component{
         return(
             <div>
             <h3>What's on your mind, {this.props.userName}?</h3>
-            <form class = 'input-box'
+            <form className = 'input-box'
              onSubmit={this.handleSubmit}>
               <textarea
                 onChange={(event) => this.handleChange (event)}
