@@ -18,12 +18,12 @@ class App extends Component {
   constructor(props){
     super(props);
     //initially set user details to null, will update upon login
-    let isSignedIn = this.checkSignedInStatus();
+    //let isSignedIn = this.checkSignedInStatus();
     this.state = {
-      isSignedIn,
-      user: isSignedIn && this.loadPerson(),
+      isSignedIn: false,
+      user: null,
       userData: [], 
-      userName: isSignedIn ? this.loadPerson() && this.loadPerson().name : 'Nameless',
+      userName: 'Nameless',
     };
   }
 
@@ -40,19 +40,37 @@ class App extends Component {
     }
   }
 
+   //check for login on start
+   componentWillMount(){
+    let userIsSignedIn = this.checkSignedInStatus();
+
+    //if user is signed in
+    if(userIsSignedIn){
+      //update state to reflect user info
+      this.setState({
+        isSignedIn: true,
+        user: this.loadPerson(),
+        userData: this.getDataFromStorage(),
+        userName: this.loadPerson().name(),
+      });
+    }
+  }
+
+  //gets user data from BS Storage
+  getDataFromStorage(){
+    return [];
+  }
+
+
+  //puts data into user's BS Storage
+  putDataInStorage(){}
+
+  //load user profile
   loadPerson() {
     let profile = blockstack.loadUserData().profile
 
     return new blockstack.Person(profile)
   }
-
-  //check for login on start
-  componentWillMount(){
-    //this.setState(prevState => ({
-    //  clicked: !prevState.clicked
-    //}));
-  }
-
 
   render() {
     return (
