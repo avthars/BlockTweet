@@ -22,7 +22,7 @@ class App extends Component {
     this.state = {
       isSignedIn: false,
       user: null,
-      userData: [], 
+      userData: [],
       userName: 'Nameless',
     };
   }
@@ -58,12 +58,33 @@ class App extends Component {
 
   //gets user data from BS Storage
   getDataFromStorage(){
-    return [];
+    let decrypt = true;
+    var STORAGE_FILE = 'tweets.json';
+    let userTweets = [];
+
+    blockstack.getFile(STORAGE_FILE, decrypt).then(
+      (tweetsText) => {
+        console.log("In getDataFromStorage");
+        //parse tweets
+        var tweets= JSON.parse(tweetsText || '[]');
+        //set as tweets to return
+        userTweets = tweets;
+        console.log(userTweets);
+      })
+      return userTweets;
   }
 
 
   //puts data into user's BS Storage
-  putDataInStorage(){}
+  putDataInStorage(tweets){
+    var STORAGE_FILE = 'tweets.json';
+    let encrypt = true;
+    let success = blockstack.putFile(STORAGE_FILE, JSON.stringify(tweets), encrypt);
+    if (!success){
+      console.log("ERROR: Could not put file in storage");
+    }
+    else {console.log("SUCCESS: PUT FILE IN USER STORAGE");}
+  }
 
   //load user profile
   loadPerson() {
@@ -85,7 +106,8 @@ class App extends Component {
         <hr/>
         <ProfilePage user = {this.state.user}
          userData = {this.state.userData} 
-         userName = {this.state.userName}/>
+         userName = {this.state.userName}
+         putData = {this.putDataInStorage}/>
          <UserTestComponent
          user = {this.state.user}
          />

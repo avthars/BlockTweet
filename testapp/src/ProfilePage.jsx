@@ -9,7 +9,8 @@ import React from 'react';
 class ProfilePage extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {userTweets: [],};
+      let passedData = this.props.userData;
+      this.state = {userTweets: passedData};
     }
   
   //Function to add new tweet to list
@@ -20,15 +21,8 @@ class ProfilePage extends React.Component {
         userTweets: prevState.userTweets.concat(newItem),
       }));
 
-      //add locallist to storage
-    /*const USER_TWEETS = this.state.userTweets;
-    const FILE_NAME = 'tweets.json';  
-    const blockstack = window.blockstack;
-    const encrypt = true;
-    //const decrypt = true
-    //display error is return is false
-    return blockstack.putFile(FILE_NAME, JSON.stringify(USER_TWEETS), encrypt); */ 
-
+      //update tweets stored in user storage
+      this.props.putData(this.state.userTweets);
     }
   
     // add to render: <TweetList userTweets={this.state.userTweets} />
