@@ -40,19 +40,19 @@ class App extends Component {
     }
   }
 
-   //check for login on start
+   //check for login on start, then set state to reflect info from profile
    componentWillMount(){
     let userIsSignedIn = this.checkSignedInStatus();
-
     //if user is signed in
     if(userIsSignedIn){
-      //update state to reflect user info
+      //get data from storage
+     this.getDataFromStorage();
+
       this.setState({
-        isSignedIn: true,
-        user: this.loadPerson(),
-        userData: this.getDataFromStorage(),
-        userName: this.loadPerson().name(),
-      });
+          isSignedIn: true,
+          user: this.loadPerson(),
+          userName: this.loadPerson().name(),
+        });
     }
   }
 
@@ -60,19 +60,18 @@ class App extends Component {
   getDataFromStorage(){
     let decrypt = true;
     var STORAGE_FILE = 'tweets.json';
-    let userTweets = [];
-
     blockstack.getFile(STORAGE_FILE, decrypt).then(
       (tweetsText) => {
         console.log("In getDataFromStorage");
         //parse tweets
-        var tweets= JSON.parse(tweetsText || '[]');
-        //set as tweets to return
-        userTweets = tweets;
-        console.log(userTweets);
+        var tweets = JSON.parse(tweetsText || '[]');
+        console.log("got the tweets");
+        console.log(tweets);
+        //set state after we've got the data
+        this.setState({userData:tweets});
       })
-      return userTweets;
   }
+
 
 
   //puts data into user's BS Storage

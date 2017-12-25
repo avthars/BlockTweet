@@ -24,6 +24,11 @@ class ProfilePage extends React.Component {
       //update tweets stored in user storage
       this.props.putData(this.state.userTweets);
     }
+
+    //put data into storage before component unmounts
+    componentWillUnmount(){
+      this.props.putData(this.state.userTweets);
+    }
   
     // add to render: <TweetList userTweets={this.state.userTweets} />
     render() {
