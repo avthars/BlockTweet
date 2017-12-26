@@ -9,8 +9,8 @@ import React from 'react';
 class ProfilePage extends React.Component {
     constructor(props) {
       super(props);
-      let passedData = this.props.userData;
-      this.state = {userTweets: passedData};
+      //let passedData = this.props.userData;
+      this.state = {userTweets: this.props.userData};
     }
   
   //Function to add new tweet to list
@@ -23,6 +23,12 @@ class ProfilePage extends React.Component {
 
       //update tweets stored in user storage
       this.props.putData(this.state.userTweets);
+    }
+
+    //update props of this component when overall app state changes
+    //and new props are passed down
+    componentWillReceiveProps(nextProps) {
+      this.setState({ userTweets: nextProps.userData });  
     }
 
     //put data into storage before component unmounts

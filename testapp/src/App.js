@@ -40,24 +40,10 @@ class App extends Component {
     }
   }
 
-   //check for login on start, then set state to reflect info from profile
-   componentWillMount(){
-    let userIsSignedIn = this.checkSignedInStatus();
-    //if user is signed in
-    if(userIsSignedIn){
-      //get data from storage
-     this.getDataFromStorage();
-
-      this.setState({
-          isSignedIn: true,
-          user: this.loadPerson(),
-          userName: this.loadPerson().name(),
-        });
-    }
-  }
+   
 
   //gets user data from BS Storage
-  getDataFromStorage(){
+  /*getDataFromStorage(){
     let decrypt = true;
     var STORAGE_FILE = 'tweets.json';
     blockstack.getFile(STORAGE_FILE, decrypt).then(
@@ -68,11 +54,10 @@ class App extends Component {
         console.log("got the tweets");
         console.log(tweets);
         //set state after we've got the data
-        this.setState({userData:tweets});
+        //problem: setState function is async, so this gets updated later?
+        this.setState({userData: tweets});
       })
-  }
-
-
+  }*/
 
   //puts data into user's BS Storage
   putDataInStorage(tweets){
@@ -92,6 +77,45 @@ class App extends Component {
     return new blockstack.Person(profile)
   }
 
+  //check for login on start, then set state to reflect info from profile
+  componentWillMount(){
+    let userIsSignedIn = this.checkSignedInStatus();
+    //if user is signed in
+    if(userIsSignedIn){
+      this.setState({
+          isSignedIn: true,
+          user: this.loadPerson(),
+          userName: this.loadPerson().name(),
+        });
+    }
+  }
+
+  //fetch data from user profile and set it as app state
+  componentDidMount(){  
+    if(this.state.isSignedIn){
+      console.log("In didMount");
+      //this.getDataFromStorage();
+      let decrypt = true;
+      var STORAGE_FILE = 'tweets.json';
+      blockstack.getFile(STORAGE_FILE, decrypt).then(
+        (tweetsText) => {
+          console.log("In getDataFromStorage");
+          //parse tweets
+          var tweets = JSON.parse(tweetsText || '[]');
+          console.log("got the tweets");
+          console.log(tweets);
+          //set state after we've got the data
+          //problem: setState function is async, so this gets updated later?
+          this.setState({userData: tweets});
+          //this.setState()
+        })
+    }
+    //force a state update
+    //this.setState(this.state);
+    console.log("Exited did mount");
+  }
+
+
   render() {
     return (
       <div className="App">
@@ -110,6 +134,11 @@ class App extends Component {
          <UserTestComponent
          user = {this.state.user}
          />
+         <ul reversed>
+        {this.state.userData.reverse().map(tweet => (
+          <li key={tweet.id}>{tweet.text}</li>
+        ))}
+      </ul>
 
       </div>
     );
