@@ -40,11 +40,14 @@ class ProfilePage extends React.Component {
     render() {
       return (
       <div>
-            <h1>{this.props.userName} BlockTweet Profile</h1>
+            <h1>{this.props.userName}'s BlockTweet Profile</h1>
+            <h2>{this.props.userId}</h2>
+            <h5>{this.props.userBio}</h5>
             <InputBox 
             tweetList = {this.state.userTweets} 
             addTweet = {this.addTweet.bind(this)}
             userName = {this.props.userName}
+            userId = {this.props.userId}
             />
             <hr/>
             <TweetList userTweets={this.state.userTweets} userName = {this.props.userName} />
@@ -76,7 +79,7 @@ class InputBox extends React.Component{
         //value = current value of it
         this.setState({text: event.target.value});
       }
-    
+
       //When user submits tweet
       onAddTweet(event){
         event.preventDefault();
@@ -86,7 +89,10 @@ class InputBox extends React.Component{
         }
         
         //currTweet: {id: new Date(), text: this.state.text}
-        const currTweet = {id: new Date(), text: this.state.text};
+        const idnum = this.props.tweetList.length;
+        // id, text, creator, date
+        const currTweet = {id: idnum, text: this.state.text, by: this.props.userId, date: new Date()};
+       
         //call parent function
         this.props.addTweet(currTweet);
         //set text in box back to empty

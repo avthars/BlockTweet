@@ -24,6 +24,8 @@ class App extends Component {
       user: null,
       userData: [],
       userName: 'Nameless',
+      userId: 'name_less',
+      userBio: '',
     };
   }
 
@@ -82,11 +84,16 @@ class App extends Component {
     let userIsSignedIn = this.checkSignedInStatus();
     //if user is signed in
     if(userIsSignedIn){
+      let person = this.loadPerson();
       this.setState({
           isSignedIn: true,
-          user: this.loadPerson(),
-          userName: this.loadPerson().name(),
+          user: person,
+          userName: person.name(),
+          userId: person.username,
+          userBio: person.description(),
         });
+        //print profile for me to see
+        console.log(this.loadPerson());
     }
   }
 
@@ -130,15 +137,13 @@ class App extends Component {
         <ProfilePage user = {this.state.user}
          userData = {this.state.userData} 
          userName = {this.state.userName}
+         userBio = {this.state.userBio}
+         userId = {this.state.userId}
          putData = {this.putDataInStorage}/>
          <UserTestComponent
          user = {this.state.user}
          />
-         <ul reversed>
-        {this.state.userData.reverse().map(tweet => (
-          <li key={tweet.id}>{tweet.text}</li>
-        ))}
-      </ul>
+        
 
       </div>
     );
