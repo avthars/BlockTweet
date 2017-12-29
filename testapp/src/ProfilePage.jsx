@@ -9,8 +9,11 @@ import React from 'react';
 class ProfilePage extends React.Component {
     constructor(props) {
       super(props);
-      //let passedData = this.props.userData;
-      this.state = {userTweets: this.props.userData};
+      this.state = {
+        userTweets: this.props.userPosts,
+        followers: this.props.followers,
+        following: this.props.following,
+      };
     }
   
   //Function to add new tweet to list
@@ -21,19 +24,37 @@ class ProfilePage extends React.Component {
         userTweets: prevState.userTweets.concat(newItem),
       }));
 
-      //update tweets stored in user storage
-      this.props.putData(this.state.userTweets);
+      //update tweets stored in user storage, with type code 1
+      this.props.putData(this.state.userTweets, 1);
+    }
+
+    //function to add new person this user follows - i.e following
+    addFollowing(following_id){
+      //add to local list of following
+      this.setState(prevState => ({
+        //concat new item onto list of old items
+      following: prevState.following.concat(following_id),
+    }));
+
+    //update following in user storage, with type code 3
+    this.props.putData(this.state.following, 3);
     }
 
     //update props of this component when overall app state changes
     //and new props are passed down
     componentWillReceiveProps(nextProps) {
-      this.setState({ userTweets: nextProps.userData });  
+      this.setState({ 
+        userTweets: nextProps.userPosts,
+        followers: nextProps.followers,
+        following: nextProps.following,
+       });  
     }
 
     //put data into storage before component unmounts
     componentWillUnmount(){
-      this.props.putData(this.state.userTweets);
+      this.props.putData(this.state.userTweets, 1);
+      this.props.putData(this.state.followers, 2);
+      this.props.putData(this.state.following, 3);
     }
   
     // add to render: <TweetList userTweets={this.state.userTweets} />

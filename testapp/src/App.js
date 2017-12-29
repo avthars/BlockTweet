@@ -19,13 +19,21 @@ class App extends Component {
     super(props);
     //initially set user details to null, will update upon login
     //let isSignedIn = this.checkSignedInStatus();
+    //followers = list of people following this user
+    //following = list of people this user follows
+
+    //userData = tweets
+    //bsUserData = blockstack user data object
     this.state = {
       isSignedIn: false,
       user: null,
-      userData: [],
+      bsUserData: null,
+      userPosts: [],
       userName: 'Nameless',
       userId: 'name_less',
       userBio: '',
+      followers: [],
+      following:[],
     };
   }
 
@@ -42,30 +50,28 @@ class App extends Component {
     }
   }
 
-   
-
-  //gets user data from BS Storage
-  /*getDataFromStorage(){
-    let decrypt = true;
-    var STORAGE_FILE = 'tweets.json';
-    blockstack.getFile(STORAGE_FILE, decrypt).then(
-      (tweetsText) => {
-        console.log("In getDataFromStorage");
-        //parse tweets
-        var tweets = JSON.parse(tweetsText || '[]');
-        console.log("got the tweets");
-        console.log(tweets);
-        //set state after we've got the data
-        //problem: setState function is async, so this gets updated later?
-        this.setState({userData: tweets});
-      })
-  }*/
-
   //puts data into user's BS Storage
-  putDataInStorage(tweets){
-    var STORAGE_FILE = 'tweets.json';
+  putDataInStorage(data, type) {
+    //determine what kind of data to store and in which file
+    var STORAGE_FILE = this.state.userId + '_tweets.json';
+    STORAGE_FILE = 'tweets.json'; // temp set
+    //type 1 = tweets
+    //type 2 = followers
+    //type 3 = following
+    if (tyoe == 1){
+      this.setState({userData: data});
+    }
+    else if(type == 2){
+      STORAGE_FILE = this.state.userId + '_followers.json';
+      this.setState({followers: data});
+    }
+    else if (type == 3) {
+      STORAGE_FILE = this.state.userId + '_following.json';
+      this.setState({following: data});
+    }
+
     let encrypt = true;
-    let success = blockstack.putFile(STORAGE_FILE, JSON.stringify(tweets), encrypt);
+    let success = blockstack.putFile(STORAGE_FILE, JSON.stringify(data), encrypt);
     if (!success){
       console.log("ERROR: Could not put file in storage");
     }
@@ -79,21 +85,32 @@ class App extends Component {
     return new blockstack.Person(profile)
   }
 
+  loadUserData() {
+    let userData = blockstack.loadUserData();
+    return userData;
+  }
+
+
   //check for login on start, then set state to reflect info from profile
   componentWillMount(){
     let userIsSignedIn = this.checkSignedInStatus();
     //if user is signed in
     if(userIsSignedIn){
       let person = this.loadPerson();
+      console.log(person);
+      let loadedData = this.loadUserData();
+      console.log("User data object");
+      console.log(loadedData);
+      console.log(loadedData.username);
+
       this.setState({
           isSignedIn: true,
           user: person,
+          bsUserData: loadedData,
           userName: person.name(),
-          userId: person.username,
+          userId: loadedData.username,
           userBio: person.description(),
         });
-        //print profile for me to see
-        console.log(this.loadPerson());
     }
   }
 
@@ -112,8 +129,7 @@ class App extends Component {
           console.log("got the tweets");
           console.log(tweets);
           //set state after we've got the data
-          //problem: setState function is async, so this gets updated later?
-          this.setState({userData: tweets});
+          this.setState({userPosts: tweets});
           //this.setState()
         })
     }
@@ -135,10 +151,12 @@ class App extends Component {
         <LoginButton/>
         <hr/>
         <ProfilePage user = {this.state.user}
-         userData = {this.state.userData} 
+         userPosts = {this.state.userPosts} 
          userName = {this.state.userName}
          userBio = {this.state.userBio}
          userId = {this.state.userId}
+         folowers = {this.state.followers}
+         following = {this.state.following}
          putData = {this.putDataInStorage}/>
          <UserTestComponent
          user = {this.state.user}
