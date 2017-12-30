@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {Tweet} from './Tweet.jsx';
+import {NavBar} from './NavBar.jsx'
 import {
   BlockTweetSignIn, BlockTweetSignOut, handleLoginOnStartUp
 } from './BlockTweetBackend.js';
@@ -145,6 +146,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">BlockTweet</h1>
         </header>
+        <NavBar/>
         <p className="App-intro">
           Welcome to BlockTweet!
         </p>

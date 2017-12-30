@@ -2,6 +2,7 @@
 //Profile Page which displays all of users Tweets
 //**************************************************************
 import React from 'react';
+import {NavBar} from './NavBar.jsx';
 
 //**************************************************************
 //Profile Page component
