@@ -7,6 +7,7 @@ import {
   BlockTweetSignIn, BlockTweetSignOut, handleLoginOnStartUp
 } from './BlockTweetBackend.js';
 import {ProfilePage} from './ProfilePage.jsx';
+import {SearchPage} from './SearchPage.jsx';
 import * as blockstack from 'blockstack';
 //Sign in functions
 import {redirectToSignIn, isSignInPending,
@@ -151,6 +152,8 @@ class App extends Component {
           Welcome to BlockTweet!
         </p>
         <LoginButton/>
+        <hr/>
+        <SearchPage/>
         <hr/>
         <ProfilePage user = {this.state.user}
          userPosts = {this.state.userPosts} 
