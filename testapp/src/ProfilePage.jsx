@@ -3,6 +3,7 @@
 //**************************************************************
 import React from 'react';
 import {NavBar} from './NavBar.jsx';
+import './ProfilePage.css';
 
 //**************************************************************
 //Profile Page component
