@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Link,
+  Route
+} from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import {Tweet} from './Tweet.jsx';
@@ -7,7 +12,7 @@ import {
   BlockTweetSignIn, BlockTweetSignOut, handleLoginOnStartUp
 } from './BlockTweetBackend.js';
 import {ProfilePage} from './ProfilePage.jsx';
-import {SearchPage} from './SearchPage.jsx';
+import {SearchPage, SearchBar} from './SearchPage.jsx';
 import * as blockstack from 'blockstack';
 //Sign in functions
 import {redirectToSignIn, isSignInPending,
@@ -20,7 +25,6 @@ class App extends Component {
   constructor(props){
     super(props);
     //initially set user details to null, will update upon login
-    //let isSignedIn = this.checkSignedInStatus();
     //followers = list of people following this user
     //following = list of people this user follows
 
@@ -142,40 +146,65 @@ class App extends Component {
 
 
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">BlockTweet</h1>
-        </header>
-        <NavBar/>
-        <p className="App-intro">
-          Welcome to BlockTweet!
-        </p>
-        <LoginButton/>
-        <hr/>
-        <SearchPage/>
-        <hr/>
-        <ProfilePage user = {this.state.user}
-         userPosts = {this.state.userPosts} 
-         userName = {this.state.userName}
-         userBio = {this.state.userBio}
-         userId = {this.state.userId}
-         folowers = {this.state.followers}
-         following = {this.state.following}
-         putData = {this.putDataInStorage}/>
-         <UserTestComponent
-         user = {this.state.user}
-         />
-        
+    let isLoggedIn = this.checkSignedInStatus();
 
+    return (
+      <Router>
+      <div className="App">
+        <Header
+        loggedIn = {isLoggedIn}
+        />
+        
+        <Route exact path = "/login"
+        render = {() => <LoginPage/>
+        }/>
+
+        <Route exact path = "/myprofile"
+        render = {() => <ProfilePage user = {this.state.user}
+          userPosts = {this.state.userPosts} 
+          userName = {this.state.userName}
+          userBio = {this.state.userBio}
+          userId = {this.state.userId}
+          folowers = {this.state.followers}
+          following = {this.state.following}
+          putData = {this.putDataInStorage}/>
+        }/>
+        
+        <Route exact path = "/search"
+        render = { () => <SearchPage/>
+        }/>
       </div>
+      </Router>
     );
   }
 }
 export default App;
 
-//Login Button component
-export class LoginButton extends Component{
+//Header component
+//props: loggedIn - is user logged in?
+export class Header extends Component {
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+  render() {
+    //show the nav bar only if user is logged in
+    let showNav = this.props.loggedIn ?  <NavBar/>: null;
+    return (
+    <div>
+    <header className="App-header">
+    <h1 className="App-title">BlockTweet</h1>
+    </header>
+    {showNav}
+    <p className = {"App-intro"}> Welcome to BlockTweet</p>
+    <p>Login with Blockstack below</p>
+    <LoginPage/>
+    </div>);
+  }
+}
+
+//Login Page
+export class LoginPage extends Component{
   constructor(props){
     super(props);
     this.state = {clicked: false};
