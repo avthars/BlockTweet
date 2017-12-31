@@ -18,8 +18,8 @@ export class NavBar extends React.Component{
         return(
             <div>
                 <nav>
-                <a href = "#">Home</a>
-                <Link to = "/myprofile">My Profile</Link>
+                <a href = "#">Timeline</a>
+                <Link to = "/home">Home</Link>
                 <Link to = "/search">Search</Link>
                 <Link to = "/login">Login</Link>
                 </nav>

@@ -55,8 +55,8 @@ class ProfilePage extends React.Component {
     //put data into storage before component unmounts
     componentWillUnmount(){
       this.props.putData(this.state.userTweets, 1);
-      this.props.putData(this.state.followers, 2);
-      this.props.putData(this.state.following, 3);
+      //this.props.putData(this.state.followers, 2);
+      //this.props.putData(this.state.following, 3);
     }
   
     // add to render: <TweetList userTweets={this.state.userTweets} />

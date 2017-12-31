@@ -47,7 +47,6 @@ export class SearchPage extends React.Component{
     render(){
         return(
             <div>
-                <NavBar/>
                 <SearchBar
                 searchFunc = {this._searchForUser}
                 />
@@ -135,7 +134,7 @@ export class SearchResults extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({ 
           rawResults: nextProps.searchResults,
-          followers: nextProps.searchQuery,
+          query: nextProps.searchQuery,
          });
       }
 

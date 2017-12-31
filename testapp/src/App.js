@@ -59,20 +59,19 @@ class App extends Component {
   //puts data into user's BS Storage
   putDataInStorage(data, type) {
     //determine what kind of data to store and in which file
-    var STORAGE_FILE = this.state.userId + '_tweets.json';
-    STORAGE_FILE = 'tweets.json'; // temp set
+    var STORAGE_FILE = 'tweets.json';
     //type 1 = tweets
     //type 2 = followers
     //type 3 = following
-    if (tyoe == 1){
-      this.setState({userData: data});
+    if (type == 1){
+      this.setState({userPosts: data});
     }
     else if(type == 2){
-      STORAGE_FILE = this.state.userId + '_followers.json';
+      STORAGE_FILE = 'followers.json';
       this.setState({followers: data});
     }
     else if (type == 3) {
-      STORAGE_FILE = this.state.userId + '_following.json';
+      STORAGE_FILE = 'following.json';
       this.setState({following: data});
     }
 
@@ -159,7 +158,7 @@ class App extends Component {
         render = {() => <LoginPage/>
         }/>
 
-        <Route exact path = "/myprofile"
+        <Route exact path = "/home"
         render = {() => <ProfilePage user = {this.state.user}
           userPosts = {this.state.userPosts} 
           userName = {this.state.userName}
@@ -169,10 +168,12 @@ class App extends Component {
           following = {this.state.following}
           putData = {this.putDataInStorage}/>
         }/>
-        
+
         <Route exact path = "/search"
-        render = { () => <SearchPage/>
+        render = {() => <SearchPage/>
         }/>
+        
+       
       </div>
       </Router>
     );
