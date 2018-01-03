@@ -151,11 +151,10 @@ class App extends Component {
           console.log(tweets);
           //set state after we've got the data and print to console
           this.setState({userPosts: tweets}, () => {
-            console.log("After DidMount"); 
+            console.log("State After DidMount"); 
             console.log(this.state);});
         })
     }
-    console.log("Exited did mount");
   }
 
 

@@ -12,9 +12,9 @@ class ProfilePage extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        userTweets: [],
-        followers: [],
-        following: [],
+        userTweets: this.props.userPosts,
+        followers: this.props.followers,
+        following: this.props.following,
       };
       //this.addTweet = this.addTweet.bind(this);
       //this.addFollowing = this.addFollowing.bind(this);
