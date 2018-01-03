@@ -12,22 +12,28 @@ class ProfilePage extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        userTweets: this.props.userPosts,
-        followers: this.props.followers,
-        following: this.props.following,
+        userTweets: [],
+        followers: [],
+        following: [],
       };
+      //this.addTweet = this.addTweet.bind(this);
+      //this.addFollowing = this.addFollowing.bind(this);
     }
   
   //Function to add new tweet to list
-    addTweet(newItem){
+  addTweet(newItem){
+    console.log('in add tweet');
+    console.log("Tweet to be added: " + newItem);
       //add to local list of tweets
-      this.setState(prevState => ({
-          //concat new item onto list of old items
-        userTweets: prevState.userTweets.concat(newItem),
-      }));
-
-      //update tweets stored in user storage, with type code 1
-      this.props.putData(this.state.userTweets, 1);
+      this.setState((prevState, props) => {
+      //concat new item onto list of old items
+     return {userTweets: prevState.userTweets.concat(newItem)};
+      }, 
+      () => {
+        this.props.putData(this.state.userTweets, 1);
+        console.log('state in Profile after calling parent func');
+        console.log(this.state.userTweets);
+      });
     }
 
     //function to add new person this user follows - i.e following
@@ -45,16 +51,19 @@ class ProfilePage extends React.Component {
     //update props of this component when overall app state changes
     //and new props are passed down
     componentWillReceiveProps(nextProps) {
-      this.setState({ 
+     this.setState({ 
         userTweets: nextProps.userPosts,
         followers: nextProps.followers,
         following: nextProps.following,
-       });  
+       }, () => {
+         console.log("State after getting Props from App in Profile:");
+         console.log(this.state);
+        });
     }
 
     //put data into storage before component unmounts
     componentWillUnmount(){
-      this.props.putData(this.state.userTweets, 1);
+      //this.props.putData(this.state.userTweets, 1);
       //this.props.putData(this.state.followers, 2);
       //this.props.putData(this.state.following, 3);
     }
@@ -91,8 +100,7 @@ class InputBox extends React.Component{
             text: ''
         };
         //bind methods to this component
-        //this.handleChange = this.handleChange.bind(this);
-        //this.handleSubmit = this.handleSubmit.bind(this);
+        //not needed because of arrow functions
     }
 
     handleChange(event) {
@@ -112,10 +120,11 @@ class InputBox extends React.Component{
         }
         
         //currTweet: {id: new Date(), text: this.state.text}
-        const idnum = this.props.tweetList.length;
+        var idnum = this.props.tweetList.length;
         // id, text, creator, date
-        const currTweet = {id: idnum, text: this.state.text, by: this.props.userId, date: new Date()};
-       
+        var currTweet = {id: idnum, text: this.state.text, by: this.props.userId, date: new Date()};
+        console.log('current Tweet made:');
+        console.log(currTweet);
         //call parent function
         this.props.addTweet(currTweet);
         //set text in box back to empty
@@ -130,7 +139,7 @@ class InputBox extends React.Component{
             <form className = 'input-box'
              onSubmit={this.handleSubmit}>
               <textarea
-                onChange={(event) => this.handleChange (event)}
+                onChange={(event) => this.handleChange(event)}
                 value={this.state.text}
               />
               <button 
@@ -153,6 +162,11 @@ class InputBox extends React.Component{
 // what happends when we take out <ul>?
 //Step two: map this list to a list of Tweet objects
 class TweetList extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {};
+  }
+
   render() {
     return (
     <div>

@@ -21,6 +21,11 @@ signUserOut, makeAuthRequest,redirectToSignInWithAuthRequest,
 getAuthResponseToken} from 'blockstack';
 window.blockstack = require('blockstack')
 
+/******************************************************************/
+// Main App component
+// Stores central app state, manages getting/ putting data into user
+// storage
+/******************************************************************/
 class App extends Component {
   constructor(props){
     super(props);
@@ -41,6 +46,9 @@ class App extends Component {
       followers: [],
       following:[],
     };
+  
+  //bind for callback
+  this.putDataInStorage  = this.putDataInStorage.bind(this);
   }
 
   //checks if user is signed in for app state
@@ -58,29 +66,36 @@ class App extends Component {
 
   //puts data into user's BS Storage
   putDataInStorage(data, type) {
+    console.log('In putData()');
+    console.log("Data to be put in storage");
+    console.log(data);
     //determine what kind of data to store and in which file
-    var STORAGE_FILE = 'tweets.json';
+    var STORAGE_FILE_PATH = 'tweets.json';
     //type 1 = tweets
     //type 2 = followers
     //type 3 = following
     if (type == 1){
-      this.setState({userPosts: data});
+      this.setState({userPosts: data}, () => { 
+        console.log('updating state in putDataInStorage');
+        console.log(this.state.userPosts);});
     }
     else if(type == 2){
-      STORAGE_FILE = 'followers.json';
+      STORAGE_FILE_PATH = 'followers.json';
       this.setState({followers: data});
     }
     else if (type == 3) {
-      STORAGE_FILE = 'following.json';
+      STORAGE_FILE_PATH = 'following.json';
       this.setState({following: data});
     }
-
-    let encrypt = true;
-    let success = blockstack.putFile(STORAGE_FILE, JSON.stringify(data), encrypt);
+    //update: set options for MR file storage
+    var options = {encrypt: false, public: true};
+    let success = blockstack.putFile(STORAGE_FILE_PATH, JSON.stringify(data), options);
     if (!success){
       console.log("ERROR: Could not put file in storage");
     }
-    else {console.log("SUCCESS: PUT FILE IN USER STORAGE");}
+    else {
+      console.log("SUCCESS: PUT FILE IN USER STORAGE");
+  }
   }
 
   //load user profile
@@ -123,29 +138,29 @@ class App extends Component {
   componentDidMount(){  
     if(this.state.isSignedIn){
       console.log("In didMount");
-      //this.getDataFromStorage();
-      let decrypt = true;
-      var STORAGE_FILE = 'tweets.json';
-      blockstack.getFile(STORAGE_FILE, decrypt).then(
+      //options object for getFile
+      //assume userID has been set at this point, hardcode to avthars.id otherwise
+      var options = {decrypt: false, user: this.state.userId, app: 'http://localhost:8080'};
+      var STORAGE_FILE_PATH = 'tweets.json';
+      blockstack.getFile(STORAGE_FILE_PATH, options).then(
         (tweetsText) => {
-          console.log("In getDataFromStorage");
+          console.log("Getting data from storage");
           //parse tweets
           var tweets = JSON.parse(tweetsText || '[]');
           console.log("got the tweets");
           console.log(tweets);
-          //set state after we've got the data
-          this.setState({userPosts: tweets});
-          //this.setState()
+          //set state after we've got the data and print to console
+          this.setState({userPosts: tweets}, () => {
+            console.log("After DidMount"); 
+            console.log(this.state);});
         })
     }
-    //force a state update
-    //this.setState(this.state);
     console.log("Exited did mount");
   }
 
 
   render() {
-    let isLoggedIn = this.checkSignedInStatus();
+    var isLoggedIn = this.checkSignedInStatus();
 
     return (
       <Router>
@@ -166,7 +181,8 @@ class App extends Component {
           userId = {this.state.userId}
           folowers = {this.state.followers}
           following = {this.state.following}
-          putData = {this.putDataInStorage}/>
+          putData = {this.putDataInStorage}
+          loggedIn = {isLoggedIn}/>
         }/>
 
         <Route exact path = "/search"
@@ -181,8 +197,12 @@ class App extends Component {
 }
 export default App;
 
+
+/******************************************************************/
 //Header component
+//Header to be displayed on every page
 //props: loggedIn - is user logged in?
+/******************************************************************/
 export class Header extends Component {
   constructor(props){
     super(props);
@@ -204,7 +224,9 @@ export class Header extends Component {
   }
 }
 
+/******************************************************************/
 //Login Page
+/******************************************************************/
 export class LoginPage extends Component{
   constructor(props){
     super(props);
@@ -216,7 +238,9 @@ export class LoginPage extends Component{
   //onClick: Sign user in in Blockstack browser
   handleSignIn(event){
     event.preventDefault();
-    blockstack.redirectToSignIn();
+    //MR sign in
+    let permissions = ['app_index'];
+    blockstack.redirectToSignIn(`${window.location.origin}/`, `${window.location.origin}/manifest.json`, permissions);
   }
 
   //onClick: Sign user out
