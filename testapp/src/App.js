@@ -19,6 +19,7 @@ import {redirectToSignIn, isSignInPending,
 handlePendingSignIn,loadUserData, isUserSignedIn,
 signUserOut, makeAuthRequest,redirectToSignInWithAuthRequest,
 getAuthResponseToken} from 'blockstack';
+import { Timeline } from './Timeline.jsx';
 window.blockstack = require('blockstack')
 
 /******************************************************************/
@@ -44,7 +45,7 @@ class App extends Component {
       userId: 'name_less',
       userBio: '',
       followers: [],
-      following:[],
+      following:['avthars.id'],
     };
   
   //bind for callback
@@ -170,6 +171,14 @@ class App extends Component {
         
         <Route exact path = "/login"
         render = {() => <LoginPage/>
+        }/>
+
+        <Route exact path = "/timeline"
+        render = {() => <Timeline 
+          userName = {this.state.userName}
+          following = {this.state.following}
+        />
+        
         }/>
 
         <Route exact path = "/home"

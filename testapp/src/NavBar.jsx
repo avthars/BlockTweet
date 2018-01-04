@@ -18,7 +18,7 @@ export class NavBar extends React.Component{
         return(
             <div>
                 <nav>
-                <a href = "#">Timeline</a>
+                <Link to = "/timeline"> Timeline</Link>
                 <Link to = "/home">Home</Link>
                 <Link to = "/search">Search</Link>
                 <Link to = "/login">Login</Link>
