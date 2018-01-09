@@ -51,6 +51,8 @@ class ProfilePage extends React.Component {
     //update props of this component when overall app state changes
     //and new props are passed down
     componentWillReceiveProps(nextProps) {
+    console.log("User Pic");
+    console.log(this.props.userPic);
      this.setState({ 
         userTweets: nextProps.userPosts,
         followers: nextProps.followers,
@@ -71,19 +73,25 @@ class ProfilePage extends React.Component {
     // add to render: <TweetList userTweets={this.state.userTweets} />
     render() {
       return (
-      <div>
-            <h1>{this.props.userName}'s BlockTweet Profile</h1>
-            <h2>{this.props.userId}</h2>
-            <h5>{this.props.userBio}</h5>
-            <InputBox 
-            tweetList = {this.state.userTweets} 
-            addTweet = {this.addTweet.bind(this)}
-            userName = {this.props.userName}
-            userId = {this.props.userId}
-            />
-            <hr/>
-            <TweetList userTweets={this.state.userTweets} userName = {this.props.userName} />
-        </div>
+      <div className = 'container-div'>
+      <h1>{this.props.userName}'s BlockTweet Profile</h1>
+      <div className = 'containter-1-div'>
+      <div className = 'profile-info-div'>
+        <h2>{this.props.userId}</h2>
+        <img src = {this.props.userPic} class = 'avatar'/>
+        <h5>{this.props.userBio}</h5>
+      </div>
+      <div className = 'input-div'>
+      <InputBox 
+          tweetList = {this.state.userTweets} 
+          addTweet = {this.addTweet.bind(this)}
+          userName = {this.props.userName}
+          userId = {this.props.userId}/>
+      </div>
+      </div>
+      <hr/>
+        <TweetList userTweets={this.state.userTweets} userName = {this.props.userName} />
+      </div>
       );
     }
   }
@@ -134,20 +142,19 @@ class InputBox extends React.Component{
       //<button onClick = {this.props.addTweet}>Input</button>
     render(){
         return(
-            <div>
+            <div className = 'center'>
             <h3>What's on your mind, {this.props.userName}?</h3>
-            <form className = 'input-box'
+            <form
              onSubmit={this.handleSubmit}>
-              <textarea
+              <textarea className = 'input-box'
                 onChange={(event) => this.handleChange(event)}
                 value={this.state.text}
               />
-              <button 
+              <button className = 'button'
               onClick = {(event) => this.onAddTweet(event)}>
               Tweet
               </button>
             </form>
-            
           </div>
         );
 
@@ -170,8 +177,8 @@ class TweetList extends React.Component {
   render() {
     return (
     <div>
-    <h3>{this.props.userName}'s Tweets</h3>
-      <ul reversed>
+    <h2>{this.props.userName}'s Tweets</h2>
+      <ul>
         {this.props.userTweets.reverse().map(tweet => (
           <li key={tweet.id}>{tweet.text}</li>
         ))}

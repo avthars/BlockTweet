@@ -16,7 +16,7 @@ export class NavBar extends React.Component{
 
     render(){
         return(
-            <div>
+            <div className = 'nav-bar'>
                 <nav>
                 <Link to = "/timeline"> Timeline</Link>
                 <Link to = "/home">Home</Link>

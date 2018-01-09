@@ -14,3 +14,7 @@ a:hover {
     color: yellow;
     padding: 1em;
   }
+
+  .nav-bar{
+    font-size: 20px; 
+  }

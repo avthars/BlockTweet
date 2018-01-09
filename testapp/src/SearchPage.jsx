@@ -101,7 +101,7 @@ export class SearchBar extends React.Component{
     render(){
         return(
             <div>
-            <h3>Search for a BlockTweet user</h3>
+            <h2>Search for a BlockTweet user</h2>
             <form>
               <input className = "search-box"
                 onChange={(event) => this.handleChange(event)}

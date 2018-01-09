@@ -19,6 +19,8 @@ export class Timeline extends React.Component{
         };
     }
 
+    
+
     componentDidMount() {
         console.log("Timeline component did mount");
         //get tweets from each id in the list of following

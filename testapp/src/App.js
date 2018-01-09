@@ -8,11 +8,10 @@ import logo from './logo.svg';
 import './App.css';
 import {Tweet} from './Tweet.jsx';
 import {NavBar} from './NavBar.jsx'
-import {
-  BlockTweetSignIn, BlockTweetSignOut, handleLoginOnStartUp
-} from './BlockTweetBackend.js';
 import {ProfilePage} from './ProfilePage.jsx';
 import {SearchPage, SearchBar} from './SearchPage.jsx';
+import blockTweetLogo from './BlockTweet_Logo.png';
+
 import * as blockstack from 'blockstack';
 //Sign in functions
 import {redirectToSignIn, isSignInPending,
@@ -187,6 +186,7 @@ class App extends Component {
           userName = {this.state.userName}
           userBio = {this.state.userBio}
           userId = {this.state.userId}
+          userPic = {this.state.user.avatarUrl()}
           folowers = {this.state.followers}
           following = {this.state.following}
           putData = {this.putDataInStorage}
@@ -197,7 +197,6 @@ class App extends Component {
         render = {() => <SearchPage/>
         }/>
         
-       
       </div>
       </Router>
     );
@@ -225,8 +224,8 @@ export class Header extends Component {
     <h1 className="App-title">BlockTweet</h1>
     </header>
     {showNav}
-    <p className = {"App-intro"}> Welcome to BlockTweet</p>
-    <p>Login with Blockstack below</p>
+    <p className = {"App-intro"}> Welcome to BlockTweet!</p>
+    <p>Login / Logout with Blockstack below:</p>
     <LoginPage/>
     </div>);
   }
@@ -261,9 +260,10 @@ export class LoginPage extends Component{
     return(
       <div>
       <button
+      className ='login-button'
       onClick = {this.handleSignIn}
       >Login with BlockStack ID</button>
-      <button onClick = {this.handleSignOut}> Logout </button> 
+      <button className = 'logout-button' onClick = {this.handleSignOut}> Logout </button> 
       </div>
     );
   }
